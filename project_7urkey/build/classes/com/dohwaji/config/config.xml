@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<settings>
+	<setting name="jdbcTypeForNull" value="NULL" /> <!--나만의화장법 맞춤저장시 필요-->
+	</settings>
+	
+	<typeAliases>
+	<!-- 공지사항 게시글-->
+		<typeAlias type="com.dohwaji.app.member.dao.MemberBean" alias="memberBean"/>
+		<typeAlias type="com.dohwaji.app.member.dao.MemberFilesBean" alias="memberFilesBean"/>
+		<typeAlias type="com.dohwaji.app.notice.dao.NoticeBean" alias="noticeBean"/>
+		<typeAlias type="com.dohwaji.app.notice.dao.NoticeFilesBean" alias="noticeFilesBean"/>
+		<typeAlias type="com.dohwaji.app.bttip.dao.BeautytipSaveBean" alias="beautytipSaveBean"/>
+		<typeAlias type="com.dohwaji.app.bttip.dao.BeautytipSearchBean" alias="beautytipSearchBean"/>
+		<typeAlias type="com.dohwaji.app.bttip.dao.BeautytipBean" alias="beautytipBean"/>
+		<typeAlias type="com.dohwaji.app.bttip.dao.BeautytipMultiFileBean" alias="MultiFileBean"/>
+		<typeAlias type="com.dohwaji.app.bttip.dao.BeautytipMultiTextBean" alias="MultiTextBean"/>
+		<typeAlias type="com.dohwaji.app.mypage.dao.MypageBean" alias="mypageBean"/>
+		<!--Product-->
+		<typeAlias type="com.dohwaji.app.product.dao.CodeBean" alias="codeBean"/>
+		<typeAlias type="com.dohwaji.app.product.dao.ProductBean" alias="productBean"/>
+		<typeAlias type="com.dohwaji.app.product.dao.FilesBean" alias="filesBean"/>
+		<typeAlias type="com.dohwaji.app.product.dao.ProductFilesBean" alias="productFilesBean"/>
+		<typeAlias type="com.dohwaji.app.product.dao.ProductReplyBean" alias="productReplyBean"/>
+		<!--search-->
+		<typeAlias type="com.dohwaji.app.search.dao.SearchBeautyTipBean" alias="searchbeautytipBean"/>
+		<typeAlias type="com.dohwaji.app.search.dao.SearchProductBean" alias="SproductBean"/>
+		<typeAlias type="com.dohwaji.app.search.dao.SearchProductReviewBean" alias="sreview"/>
+	
+	     <typeAlias type="com.dohwaji.app.report.dao.ReportAllBean" alias="reportBean"/>
+      <typeAlias type="com.dohwaji.app.report.dao.ReportFilesBean" alias="reportFilesBean"/>
+	</typeAliases>
+	
+	<environments default="development">
+	<environment id="development">
+	<transactionManager type="JDBC"/>
+	<dataSource type="POOLED">
+	<property name="driver" value="oracle.jdbc.OracleDriver"/>
+	<property name="url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+	<property name="username" value="hr"/>
+	<property name="password" value="hr"/>
+	</dataSource>
+	</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="com/dohwaji/sql/beautytip.xml"/>
+		<mapper resource="com/dohwaji/sql/beautytipFile.xml"/>
+		<mapper resource="com/dohwaji/sql/beautytipMultiFile.xml"/>
+		<mapper resource="com/dohwaji/sql/member.xml"/>
+		<mapper resource="com/dohwaji/sql/files.xml"/>
+		<mapper resource="com/dohwaji/sql/notice.xml"/>
+		<mapper resource="com/dohwaji/sql/noticeFiles.xml"/>
+		<mapper resource="com/dohwaji/sql/mypage.xml"/>		
+		<!--Product-->
+		<mapper resource="com/dohwaji/sql/product.xml"/> 
+		<mapper resource="com/dohwaji/sql/productFiles.xml"/> 
+		<mapper resource="com/dohwaji/sql/productExt.xml"/> 
+		<!--search-->
+		<mapper resource="com/dohwaji/sql/search.xml"/>
+		<!--admin-->
+		<mapper resource="com/dohwaji/sql/admin.xml"/>
+		
+		<mapper resource="com/dohwaji/sql/report.xml"/> 
+      <mapper resource="com/dohwaji/sql/reportFiles.xml"/> 
+	</mappers>
+</configuration>

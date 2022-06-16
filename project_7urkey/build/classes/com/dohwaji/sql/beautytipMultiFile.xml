@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BeautytipMultiFile">
+
+	<insert id="insertBTMultiFile" parameterType="map">
+		INSERT INTO BTMULTIFILES
+		(FILENAME, BTTIPNUM)
+		VALUES(
+			#{filename}, #{bttipnum}
+		)
+	</insert>
+	
+	<insert id="insertBTContents" parameterType="MultiTextBean">
+		INSERT INTO BTMULTICONTENTS 
+		(CONTENTS, BTTIPNUM) 
+		VALUES 
+		(#{contents}, #{bttipnum})
+	</insert>
+	
+	<select id="getMultiImgDetail" parameterType="_int" resultType="MultiFileBean">
+		SELECT FILENAME FROM BTMULTIFILES WHERE BTTIPNUM = ${bttipnum} AND FILENAME IS NOT NULL
+	</select>
+	
+	<select id="getMultiTextDetail" parameterType="_int" resultType="MultiTextBean">
+		SELECT CONTENTS FROM BTMULTICONTENTS WHERE BTTIPNUM = ${bttipnum} AND CONTENTS IS NOT NULL
+	</select>
+	
+	<delete id="deleteMultiText" parameterType="_int">
+		DELETE FROM BTMULTICONTENTS WHERE BTTIPNUM = ${bttipnum}
+	</delete>
+	<delete id="deleteMultiFile" parameterType="_int">
+		DELETE FROM BTMULTIFILES WHERE BTTIPNUM = ${bttipnum}
+	</delete>
+		
+</mapper>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="NoticeFiles">
+
+<!-- 첨부파일 상세보기 -->
+	<select id="getDetail"  parameterType="_int" resultType="noticeFilesBean">
+		SELECT * FROM NOTICE_FILES WHERE NOTICE_NUM = ${notice_num}
+	</select>
+
+
+<!-- 첨부파일 등록하기 -->
+	<insert id="insertFile" parameterType="map">
+		INSERT INTO NOTICE_FILES
+		VALUES(
+			#{notice_file_name}, ${notice_num}
+		)
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+

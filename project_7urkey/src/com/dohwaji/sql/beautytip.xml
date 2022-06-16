@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Beautytip">
+	<select id="selectByColumn" resultType="beautytipBean" parameterType="beautytipSearchBean">
+		SELECT * FROM BEAUTYTIP
+		WHERE ${column} in
+		<foreach item="value" collection="values" open="(" separator="," close=")">
+        	#{value}
+		</foreach>
+	</select>
+	<select id="getBttipCnt" resultType="_int">
+		SELECT COUNT(*) FROM BEAUTYTIP
+	</select>
+	<select id="listAll" parameterType="map" resultType="beautytipBean">
+		SELECT * FROM
+			(SELECT ROWNUM R, D.* FROM 
+				(SELECT * FROM BEAUTYTIP ORDER BY BTTIPNUM DESC) D) B
+					WHERE B.R BETWEEN ${startRow} AND ${endRow}
+	</select>
+	<insert id="bttipsave" parameterType="beautytipSaveBean">
+		INSERT INTO BEAUTYSAVE VALUES(BTTIPSAVE_SEQ.NEXTVAL, #{userID}, #{bttipGender}, #{bttipAge}, #{bttipEye}, #{bttipNose}, #{bttipFaceshape}, #{bttipLip}, #{bttipFacetype}, #{bttipFacetone}, #{bttipSeason}, #{bttipTheme})
+	</insert>
+	
+	<select id="bttipCnt" parameterType="string" resultType="_int">
+	SELECT COUNT(BTTIPSAVENUM) FROM BEAUTYSAVE WHERE USERID=#{userID}
+	</select>
+	
+	<insert id="bttipinsert" parameterType="BeautytipBean">
+		INSERT INTO BEAUTYTIP VALUES(
+		BEAUTYTIP_SEQ.NEXTVAL, #{userID}, #{bttipTitle}, SYSDATE , #{bttipContent}, #{bttipGender}, 
+		#{bttipAge}, #{bttipEye}, #{bttipNose}, #{bttipLip}, #{bttipFace}, #{bttipType},  #{bttipTone}, #{bttipSeason},#{bttipTheme}, 0
+		)
+	</insert>
+	
+	<select id="getSeq" resultType="_int">
+		SELECT BEAUTYTIP_SEQ.CURRVAL FROM DUAL
+	</select>
+	
+	<select id="getBtTipDetail" parameterType="_int" resultType="BeautytipBean">
+		SELECT BTTIPLIKE,BTTIPNUM, USERID, BTTIPTITLE, BTTIPCONTENT, BTTIPGENDER, BTTIPAGE, BTTIPEYE, BTTIPNOSE, BTTIPLIP, BTTIPFACE, BTTIPTYPE, BTTIPTONE, BTTIPSEASON, BTTIPTHEME 
+		FROM BEAUTYTIP WHERE BTTIPNUM = ${bttipnum}
+	</select>
+	
+	
+	<update id="bttiplike" parameterType="_int">
+		UPDATE BEAUTYTIP
+		SET BTTIPLIKE = BTTIPLIKE + 1
+		WHERE BTTIPNUM = ${bttipnum}
+	</update>
+	
+	<delete id="deleteBttip" parameterType="_int">
+		DELETE FROM BEAUTYTIP WHERE BTTIPNUM = ${bttipnum}
+	</delete>
+	
+</mapper>

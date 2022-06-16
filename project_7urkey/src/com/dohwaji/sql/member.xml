@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Member">
+	
+	<insert id="join" parameterType="memberBean">
+		INSERT INTO "USER" (
+			usernum ,userid, userpw, useremail, username, userphone, followingnum, followernum, userck
+		)
+		VALUES(
+			USER_SEQ.NEXTVAL ,#{userid}, #{userpw}, #{useremail}, #{username}, #{userphone}, 0, 0, #{userck}
+		)
+	</insert>
+	
+	<select id="getusernum" resultType="_int">
+		SELECT USER_SEQ.CURRVAL FROM DUAL
+	</select>
+	
+	<select id="checkid" parameterType="string" resultType="_int">
+		SELECT NVL(count(*),0) FROM "USER" WHERE USERID = #{userid}
+	</select>
+	
+	<select id="login" parameterType="map" resultType="map">
+		SELECT USERID FROM "USER"
+		WHERE USERID = #{id} AND USERPW = #{pw}
+	</select>
+	
+	<select id="imgnum" parameterType="string" resultType="_int">
+		SELECT USERNUM FROM "USER" WHERE USERID = #{id}
+	</select>
+	
+	<select id="getusernumForFindPw" parameterType="map" resultType="_int">
+		SELECT USERNUM FROM "USER"
+		WHERE USERID = #{id} AND USERPHONE = #{phone}
+	</select>
+	
+	<update id="updatepw" parameterType="map">
+		UPDATE "USER" SET USERPW = #{pw} WHERE USERNUM = #{num}
+	</update>
+	
+	<update id="updateck" parameterType="map">
+		UPDATE "USER" SET USERCK = #{ck} WHERE USERNUM = #{num}
+	</update>
+	
+	<select id="cknum" parameterType="string" resultType="string">
+		SELECT USERPHONE FROM "USER"
+		WHERE USERCK = #{ck_num}
+	</select>
+	
+	<select id="findid" parameterType="map" resultType="string">
+		SELECT USERID FROM "USER"
+		WHERE USERNAME = #{name} AND USERPHONE = #{phone}
+	</select>
+	
+	<update id="updateckid" parameterType="string" >
+		UPDATE "USER" SET USERCK = '1' WHERE USERPHONE = #{phone}
+	</update>
+	
+	<select id="ckForLogin" parameterType="string" resultType="string">
+		SELECT USERCK FROM "USER"
+		WHERE USERID = #{id}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+

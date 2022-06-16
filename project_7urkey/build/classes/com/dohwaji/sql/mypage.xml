@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Mypage">
+	<select id="memberinfo" parameterType="_int" resultType="memberBean">
+		SELECT * FROM "USER" WHERE USERNUM = ${userNum}
+	</select>
+	<select id="checkpw" parameterType="_int" resultType="string">
+		SELECT USERPW FROM "USER" WHERE USERNUM = ${userNum}
+	</select>
+	<select id="bttipnum" parameterType="string" resultType="_int">
+		SELECT COUNT(*) FROM BEAUTYTIP WHERE USERID = #{userid}
+	</select>
+	<select id="reviewnum" parameterType="string" resultType="_int">
+		SELECT COUNT(*) FROM PRODUCT_COMMENT WHERE USERID = #{userid}
+	</select>
+	<update id="updateuser" parameterType = "memberBean">
+		UPDATE "USER"
+		SET USERPW=#{userpw}, USERNAME=#{username}
+		WHERE USERNUM=${usernum}		
+	</update>
+	<delete id="signout" parameterType="_int">
+		DELETE FROM "USER" WHERE USERNUM=${userNum}
+	</delete>
+	<select id="getbttipList" parameterType="string" resultType="beautytipBean">
+		SELECT * FROM BEAUTYTIP WHERE USERID=#{userid}
+	</select>
+	<select id="getBttipImg" parameterType="_int" resultType="string">
+		SELECT FILENAME FROM BEAUTYTIPFILES WHERE BTTIPNUM=#{bttipNum}
+	</select>
+	<select id="getreviewList" parameterType="string" resultType="_int">
+		SELECT COMMENT_NUM FROM "PRODUCT_COMMENT" WHERE USERID=#{userid}
+	</select>
+	<select id="getreview" parameterType="_int" resultType="string">
+		SELECT COMMENT_WRITE FROM "PRODUCT_COMMENT" WHERE COMMENT_NUM=${commentNum}
+	</select>
+	<select id="getProductNum" parameterType="_int" resultType="_int">
+		SELECT PRODUCT_NUM FROM "PRODUCT_COMMENT" WHERE COMMENT_NUM=${commentNum}
+	</select>
+	<select id="getProductName" parameterType="_int" resultType="string">
+		SELECT PRODUCT_TITLE FROM PRODUCT WHERE PRODUCT_NUM=${productNum}
+	</select>
+	<select id="getProductImg" parameterType="_int" resultType="string">
+		SELECT PRODUCT_IMAGE FROM PRODUCT WHERE PRODUCT_NUM=${productNum}
+	</select>
+	<!--bttip-->
+	<select id="mybttip" parameterType="string" resultType="map">
+	SELECT * FROM BEAUTYSAVE WHERE USERID=#{userid}
+	</select>
+	
+	<delete id="deletebttip" parameterType="_int">
+	DELETE FROM BEAUTYSAVE WHERE BTTIPSAVENUM = ${bttipsavenum}
+	</delete>
+	<!--follow-->
+	<select id="followernum" parameterType="_int" resultType="_int">
+		SELECT COUNT(*) FROM FOLLOW WHERE TARGET_USERNUM = ${userNum}
+	</select>
+	<select id="followingnum" parameterType="_int" resultType="_int">
+		SELECT COUNT(*) FROM FOLLOW WHERE USERNUM = ${userNum}
+	</select>
+	<select id="getfollowerlist" parameterType="_int" resultType="_int">
+		SELECT USERNUM FROM FOLLOW WHERE TARGET_USERNUM = ${userNum}
+	</select>
+	<select id="getfollowinglist" parameterType="_int" resultType="_int">
+		SELECT TARGET_USERNUM FROM FOLLOW WHERE USERNUM = ${userNum}
+	</select>
+	<select id="checkFollow" parameterType="map" resultType="_int">
+		SELECT COUNT(*) FROM FOLLOW WHERE USERNUM = ${userNum} AND TARGET_USERNUM = ${targetuserNum}
+	</select>
+	<update id="updateFollowingNum" parameterType = "map">
+		UPDATE "USER"
+		SET FOLLOWINGNUM=${followingNum} 
+		WHERE USERNUM=${userNum}		
+	</update>
+	<update id="updateFollowerNum" parameterType = "map">
+		UPDATE "USER"
+		SET FOLLOWERNUM=${followerNum} 
+		WHERE USERNUM=${userNum}		
+	</update>
+	<delete id="deleteFollow" parameterType="map">
+		DELETE FROM FOLLOW WHERE USERNUM=${userNum} AND TARGET_USERNUM = ${targetuserNum}
+	</delete>
+	<insert id="insertFollow" parameterType="map">
+		INSERT INTO FOLLOW
+		(FOLLOW_NUM, USERNUM, TARGET_USERNUM)
+		VALUES(FOLLOW_SEQ.NEXTVAL, ${userNum}, ${targetuserNum})
+	</insert>
+	
+	<!--homepage-->
+	<select id="getTopFollower" resultType="_int">
+		SELECT USERNUM FROM (SELECT ROWNUM R, A.* FROM (SELECT * FROM "USER" ORDER BY FOLLOWERNUM DESC) A) B WHERE B.R BETWEEN 1 AND 5 
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+

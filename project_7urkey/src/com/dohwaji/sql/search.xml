@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Search">
+<!-- 첨부파일 상세보기 -->
+	<select id = "searchbeautytip" parameterType = "string" resultType="searchbeautytipBean">
+	SELECT * FROM BEAUTYTIP WHERE BTTIPTITLE LIKE '%'||#{query}||'%'	
+	</select>
+	
+	<select id = "searchproduct" parameterType = "string" resultType="SproductBean">
+	SELECT * FROM PRODUCT WHERE PRODUCT_TITLE LIKE '%'||#{query}||'%'	
+	</select>
+	
+	<select id = "searchreview" parameterType = "string" resultType="sreview">
+	SELECT * FROM P_REVIEW WHERE REVIEW_TITLE LIKE '%'||#{query}||'%'	
+	</select>
+</mapper>

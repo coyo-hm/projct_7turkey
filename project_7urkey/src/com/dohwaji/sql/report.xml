@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Report">
+
+
+
+
+<!-- 신고 수정   -->
+	<update id="updateReport" parameterType="reportBean">
+		UPDATE REPORT
+		SET REPORT_TITLE = #{report_title}, REPORT_CONTENTS = #{report_contents}
+		WHERE REPORT_NUM = ${report_num}
+	</update>
+
+
+<!--  게시글 삭제 -->
+	<delete id="deleteReport" parameterType="_int">
+		DELETE FROM REPORT WHERE REPORT_NUM = ${report_num}
+	</delete>
+	
+	
+
+<!-- 클릭시 조회수 증가 -->
+	<update id="updateReadCount" parameterType="_int">
+		UPDATE REPORT
+		SET NOTICE_READCOUNT = REPORT_READCOUNT + 1
+		WHERE REPORT_NUM = ${report_num}
+	</update>
+	
+	
+
+<!-- 클릭 상세보기 -->
+	<select id="getDetail" parameterType="_int" resultType="reportBean">
+		SELECT * FROM REPORT WHERE REPORT_NUM = ${report_num}
+	</select>
+	
+	
+	
+
+	<select id="getSeq" resultType="_int">
+		SELECT REPORT_SEQ.CURRVAL FROM DUAL
+	</select>
+
+
+
+<!-- 신고 기능 게시글 등록 -->
+	<insert id="insertReport" parameterType="reportBean">
+		INSERT INTO REPORT
+		VALUES(
+			REPORT_SEQ.NEXTVAL,
+			#{report_type}, 
+			#{report_board}, 
+			#{userid}, 
+			#{report_title}, 
+			#{report_contents}, 
+			SYSDATE,
+			1
+		)
+	</insert>
+
+
+
+	
+<!-- 신고 게시글 수 -->
+	<select id="reportCnt" resultType="_int">
+		SELECT COUNT(*) FROM REPORT
+	</select>
+	
+	
+	
+<!-- 신고 목록 조회 -->
+	<select id="listAll" parameterType="map" resultType="reportBean">
+		SELECT * FROM
+			(SELECT ROWNUM R, D.* FROM 
+				(SELECT * FROM REPORT ORDER BY REPORT_NUM DESC) D) B
+				 WHERE B.R BETWEEN ${startRow} AND ${endRow} AND report_result = 1
+	</select>
+	
+	
+	<!-- 신고 목록 조회  tset-->
+	<select id="getList" parameterType="map" resultType="reportBean">
+		SELECT 
+		report_num, report_type, report_board, userid, report_title, report_date
+		FROM REPORT WHERE report_result = 2 ORDER BY REPORT_NUM DESC
+	</select>
+	
+	
+	<!-- admin 삭제  통과  관리  -->
+	<update id="updatePass" parameterType="reportBean">
+		UPDATE REPORT
+  		SET report_result = '2'
+	  	WHERE REPORT_NUM = ${report_num}
+	</update>
+	
+		
+<!-- 				
+		SELECT 
+		report_num, report_type, report_board, userid, report_title, report_date
+		FROM REPORT ORDER BY REPORT_NUM DESC;
+-->		
+
+	
+	
+	
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductExt">
+
+	<select id="productCnt" resultType="_int">
+		SELECT COUNT(*) FROM PRODUCT
+	</select>
+	
+	<select id="getCat" resultType="codeBean">
+     SELECT ID, NAME FROM (
+	    <!-- 대분류가져오기 ( 다시 더 찾아보기) -->
+	    select 0         as id
+	          ,'- 전체 -' as name
+	      from dual
+	     union all
+		select CATECHORY_DIV_ID   as id
+              ,CATECHORY_DIV_NAME as name
+		  from catechory
+		  )
+	  order by ID --ID 순으로 정렬
+	</select>
+	
+	
+	<select id="getCat2" parameterType="map" resultType="codeBean">
+	    <!-- 소분류가져오기 -->
+	    select 0         as id
+	          ,'- 전체 -' as name
+	      from dual
+	     union all
+		select CATECHORY_DIV_ID2   as id
+              ,CATECHORY_DIV_NAME2 as name
+		  from catechory2
+         where CATECHORY_DIV_ID in (select CATECHORY_DIV_ID from catechory where CATECHORY_DIV_NAME = #{category})
+	</select>
+	
+	
+	<select id="getDetail" parameterType="_int" resultType="productBean">
+		SELECT * FROM PRODUCT WHERE PRODUCT_NUM = ${productNum}
+	</select>
+	
+	<insert id="insertProduct" parameterType="productBean">
+		INSERT INTO PRODUCT
+		VALUES(
+			PRODUCT_SEQ.NEXTVAL, #{productTitle}, #{productExplanation}, #{userId}, SYSDATE, 0
+		)
+	</insert>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

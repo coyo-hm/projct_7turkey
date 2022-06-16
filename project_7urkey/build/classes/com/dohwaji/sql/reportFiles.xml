@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReportFiles">
+
+<!-- 공지 첨부파일 삭제 -->
+	<delete id="deleteFiles" parameterType="_int">
+		DELETE FROM REPORT_FILES WHERE REPORT_NUM = ${report_num}
+	</delete>
+
+
+<!-- 첨부파일 상세보기 -->
+	<select id="getDetail"  parameterType="_int" resultType="reportFilesBean">
+		SELECT * FROM REPORT_FILES WHERE REPORT_NUM = ${report_num}
+	</select>
+
+
+<!-- 첨부파일 등록하기 -->
+	<insert id="insertFile" parameterType="map">
+		INSERT INTO REPORT_FILES
+		VALUES(
+			#{report_file_name}, ${report_num}
+		)
+	</insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+

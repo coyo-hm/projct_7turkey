@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>Test</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  
+    <!-- 나만의 화장법 -->
+  <servlet>
+  	<servlet-name>BeautytipFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.bttip.BeautytipFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>BeautytipFrontController</servlet-name>
+	<url-pattern>*.bt</url-pattern>  	
+  </servlet-mapping>
+  
+  <!-- 신고 게시글 -->
+   <servlet>
+  	<servlet-name>ReportFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.report.ReportFrontController</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>ReportFrontController</servlet-name>
+  	<url-pattern>*.rep</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+   <!-- 카테고리  -->
+  <servlet>
+  	<servlet-name>CatechoryFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.catechory.CatechoryFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>CatechoryFrontController</servlet-name>
+	<url-pattern>*.ca</url-pattern>  	
+  </servlet-mapping>
+  
+  
+   <!-- 공지 게시글  -->
+  <servlet>
+  	<servlet-name>NoticeFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.notice.NoticeFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>NoticeFrontController</servlet-name>
+	<url-pattern>*.no</url-pattern>  	
+  </servlet-mapping>
+  
+
+   <!-- 상품등록 -->
+  <servlet>
+  	<servlet-name>ProductFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.product.ProductFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ProductFrontController</servlet-name>
+	<url-pattern>*.pr</url-pattern>  	
+  </servlet-mapping>
+  <!--상품뷰 이미지 서블릿-->
+  <servlet>
+    <servlet-name>fileServlet</servlet-name>
+    <servlet-class>com.dohwaji.app.product.ProductFileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>fileServlet</servlet-name>
+    <url-pattern>/ProductFile/*</url-pattern>
+  </servlet-mapping>
+  
+  
+   <!-- 상품리뷰 -->
+  <servlet>
+  	<servlet-name>ProductReviewFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.productReview.ProductReviewFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ProductReviewFrontController</servlet-name>
+	<url-pattern>*.prr</url-pattern>  	
+  </servlet-mapping>
+  
+
+
+   <!-- 할인 -->
+  <servlet>
+  	<servlet-name>SaleFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.sale.SaleFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SaleFrontController</servlet-name>
+	<url-pattern>*.sa</url-pattern>  	
+  </servlet-mapping>
+  
+  <!-- 회원가입 -->
+    <servlet>
+  	<servlet-name>MemberFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.member.MemberFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>MemberFrontController</servlet-name>
+  	<url-pattern>*.me</url-pattern>
+  </servlet-mapping>
+  
+	<!-- 마이페이지 -->  
+   <servlet>
+    <servlet-name>MypageFrontController</servlet-name>
+    <servlet-class>com.dohwaji.app.mypage.MypageFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MypageFrontController</servlet-name>
+    <url-pattern>*.my</url-pattern>
+  </servlet-mapping>
+  
+  
+  
+      <!--검색-->
+  <servlet>
+  	<servlet-name>SearchFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.search.SearchFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SearchFrontController</servlet-name>
+	<url-pattern>*.ser</url-pattern>  	
+  </servlet-mapping>
+  
+  
+  
+  <!--관리자 로그인-->
+  <servlet>
+  	<servlet-name>AdminFrontController</servlet-name>
+  	<servlet-class>com.dohwaji.app.admin.AdminFrontController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>AdminFrontController</servlet-name>
+	<url-pattern>*.adm</url-pattern>  	
+  </servlet-mapping>
+  
+  
+  
+</web-app>

@@ -1,0 +1,65 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<!--
+   Faction by Pixelarity
+   pixelarity.com | hello@pixelarity.com
+   License: pixelarity.com/license
+-->
+<html>
+<head>
+      <title>${pageContext.request.contextPath}</title>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+      <link rel="stylesheet" href="${pageContext.request.contextPath}/blue/assets/css/main.css" />
+</head>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script>
+	$(document).ready(function() {
+		$("#header").load("${pageContext.request.contextPath}/blue/include/header.jsp")
+	});
+</script>
+<body class="is-preload">
+
+	<header id="header"></header> 
+
+      <!-- Wrapper -->
+         <div class="wrapper">
+
+            <!-- Main -->
+               <section class="main">
+                  <section>
+                     <h1>인증하기</h1>
+                        <form name="PhoneCkForm" action="${pageContext.request.contextPath}/join/MemberPhoneCkOk.me" method="post">
+                           <div class="row gtr-uniform">
+                           <div class="col-6 col-12-xsmall">
+                              <h3>인증번호</h3>
+                              <input type="text" name="ck_num" placeholder="Number" />
+                           </div>
+                           </div>
+                        </form>
+                        <ul class="actions fit" >
+                        	 <li class="login" style="width:10%; marin:0 auto; text-align:center;"><a href="javascript:PhoneCkForm.submit()" class="button primary fit">인증 하기</a></li>
+                        </ul>
+                        
+                  </section>
+               </section>
+         </div>
+      
+
+<!-- Scripts -->
+<script src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/jquery.dropotron.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/browser.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/breakpoints.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/util.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
+<script src="//code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.js"></script>
+<script>var contextPath = "${pageContext.request.contextPath}";</script>
+<script src="${pageContext.request.contextPath}/blue/join/join.js"></script>
+<script> $(function() { $("#postcodify_search_button").postcodifyPopUp(); }); </script>	
+
+   </body>
+</html>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Product">
+
+
+	<!-- 리뷰 평점 순 -->
+	<select id="starReply" parameterType="map" resultType="productReplyBean">
+		SELECT 
+			 COMMENT_NUM        commentNum  
+			,PRODUCT_NUM        productNum  
+			,USERID             userid      
+			,COMMENT_WRITE      commentWrite
+			,COMMENT_BLAME      commentBlame
+			,COMMENT_POINT      commentPoint
+			,COMMENT_DATE       commentDate 
+			,CASE WHEN COMMENT_POINT = 1 THEN '★☆☆☆☆'
+			      WHEN COMMENT_POINT = 2 THEN '★★☆☆☆'
+			      WHEN COMMENT_POINT = 3 THEN '★★★☆☆'
+			      WHEN COMMENT_POINT = 4 THEN '★★★★☆'
+			      WHEN COMMENT_POINT = 5 THEN '★★★★★'
+			      ELSE '☆☆☆☆☆'
+			 END                commentStars
+		FROM PRODUCT_COMMENT
+       WHERE PRODUCT_NUM = #{productNum}
+       ORDER BY COMMENT_POINT DESC
+	</select>
+	
+	
+<!-- 추천많은 순으로 가져오기 -->
+   <select id="likeAll" parameterType="_int" resultType="_int">
+      SELECT COMMENTNUM
+      FROM (SELECT * FROM COMMENT_LIKE WHERE PRODUCT_NUM = ${productNum}) 
+      GROUP BY COMMENTNUM ORDER BY COUNT(*) DESC
+   </select>
+   
+
+	<!-- 댓글 정보 가져오기 -->
+	<select id="getCommentInfo" parameterType="map" resultType="productReplyBean">
+		SELECT * FROM PRODUCT_COMMENT WHERE COMMENT_NUM = ${commentNum}
+	</select>
+	
+	
+
+<!-- 나만의 글 조회-->
+<!-- 
+SELECT * FROM PRODUCT_COMMENT
+WHERE USERID = 'admin'
+ORDER BY COMMENT_NUM DESC;
+-->
+<!--
+	<select id="mypageReply" parameterType="map" resultType="productReplyBean">
+		SELECT * FROM PRODUCT_COMMENT
+		WHERE USERID = #{userid} AND PRODUCT_NUM = #{productNum}
+		ORDER BY COMMENT_NUM DESC
+	</select>
+-->
+	
+	<select id="mypageReply" parameterType="map" resultType="productReplyBean">
+		SELECT 
+			 COMMENT_NUM        commentNum  
+			,PRODUCT_NUM        productNum  
+			,USERID             userid      
+			,COMMENT_WRITE      commentWrite
+			,COMMENT_BLAME      commentBlame
+			,COMMENT_POINT      commentPoint
+			,COMMENT_DATE       commentDate 
+			,CASE WHEN COMMENT_POINT = 1 THEN '★☆☆☆☆'
+			      WHEN COMMENT_POINT = 2 THEN '★★☆☆☆'
+			      WHEN COMMENT_POINT = 3 THEN '★★★☆☆'
+			      WHEN COMMENT_POINT = 4 THEN '★★★★☆'
+			      WHEN COMMENT_POINT = 5 THEN '★★★★★'
+			      ELSE '☆☆☆☆☆'
+			 END                commentStars
+		FROM PRODUCT_COMMENT
+       WHERE PRODUCT_NUM = #{productNum} AND USERID = #{userid}
+       ORDER BY COMMENT_NUM DESC
+	</select>
+
+
+	<!-- 동일 게시글 추천 여부 검색 -->
+	<select id="like_check" parameterType="map" resultType="int">
+		select count(*) from COMMENT_LIKE 
+		where commentNum = ${commentNum} and userid = #{userid} and PRODUCT_NUM = ${productNum}
+	</select>
+	
+	
+	<!-- 게시글 추천 -->  
+	<insert id="like_update" parameterType="map">
+		insert into COMMENT_LIKE values(${commentNum}, #{userid}, ${productNum})
+	</insert>
+ 
+	<!-- 게시글 추천 취소  -->
+	<delete id="like_delete" parameterType="map">
+		delete from COMMENT_LIKE 
+		where commentNum = ${commentNum} and userid = #{userid} and PRODUCT_NUM = ${productNum}
+	</delete>
+
+		<!-- 게시글 추천수 -->
+	<select id="like_count" parameterType="int" resultType="int">
+		select count(*) from COMMENT_LIKE where commentNum = ${commentNum}
+	</select>
+	
+	
+	
+
+	<select id="productCnt" resultType="_int">
+		SELECT COUNT(*) FROM PRODUCT
+	</select>
+	
+	<select id="listAll" parameterType="map" resultType="productBean">
+	    <!-- 제품 리스트 조회 --> 
+		SELECT 
+			 B.PRODUCT_NUM             productNum    
+            ,CASE WHEN ROUND(NVL(D.AVG_POINT,0)) = 1 THEN '★☆☆☆☆'
+			      WHEN ROUND(NVL(D.AVG_POINT,0)) = 2 THEN '★★☆☆☆'
+			      WHEN ROUND(NVL(D.AVG_POINT,0)) = 3 THEN '★★★☆☆'
+			      WHEN ROUND(NVL(D.AVG_POINT,0)) = 4 THEN '★★★★☆'
+			      WHEN ROUND(NVL(D.AVG_POINT,0)) = 5 THEN '★★★★★'
+			      ELSE '☆☆☆☆☆'
+			 END                       avgPoint      
+			,B.CATECHORY_DIV_ID2       catechoryDivId2   
+			,B.PRODUCT_BRAND           productBrand      
+			,B.PRODUCT_TITLE           productTitle      
+			,B.PRODUCT_EXPLANATION     productExplanation
+			,B.PRODUCT_PRICE           productPrice      
+			,B.PRODUCT_DATE            productDate       
+			,B.PRODUCT_IMAGE           productImage
+          FROM ( -- 상품 가져오기
+		        SELECT ROWNUM R, D.* 
+		          FROM	(SELECT * 
+		                   FROM PRODUCT ORDER BY PRODUCT_DATE DESC --정렬순서
+		                ) D
+		       ) B -- 상품
+		      ,(
+		      -- 카테고리 가져오기(상픔테이블에 소분류만 등록돼 있어서 조인해야함(스무디한테 조인 다시 몰어보기ㅠ) 
+				SELECT A.catechory_div_id
+				      ,b.catechory_div_id2
+				  FROM CATECHORY  A
+				      ,CATECHORY2 B
+				 WHERE a.catechory_div_id = b.catechory_div_id
+		       ) C -- 카테고리 -->
+		       ,(--상품별 평균평점
+                 SELECT PRODUCT_NUM
+                       ,AVG(COMMENT_POINT) AS AVG_POINT
+                   FROM PRODUCT_COMMENT D
+               GROUP BY PRODUCT_NUM
+                ) D
+	      WHERE 1=1 --B.R BETWEEN ${startRow} AND ${endRow}
+		    AND B.CATECHORY_DIV_ID2 = C.CATECHORY_DIV_ID2
+            AND B.PRODUCT_NUM       = D.PRODUCT_NUM (+)
+		    AND 1 = CASE WHEN ${category1Id} = 0 THEN 1
+		                 WHEN ${category1Id} = C.CATECHORY_DIV_ID THEN 1
+		                 ELSE 0
+		            END
+		    AND 1 = CASE WHEN ${category2Id} = 0 THEN 1
+		                 WHEN ${category2Id} = C.CATECHORY_DIV_ID2 THEN 1
+		                 ELSE 0
+		            END	
+	  <choose>
+	     <when test="list_order==1">
+       ORDER BY B.PRODUCT_DATE DESC --최신순
+     	 </when>
+ 	     <when test="list_order==2">
+       ORDER BY NVL(D.AVG_POINT,0) DESC --별점순
+ 	     </when>
+	     <otherwise>
+       ORDER BY B.PRODUCT_DATE DESC --최신순
+        </otherwise>
+      </choose>
+	</select>
+	
+	<select id="getDetail" parameterType="_int" resultType="productBean">		
+	  SELECT 
+			 B.PRODUCT_NUM             productNum        
+			,B.CATECHORY_DIV_ID2       catechoryDivId2   
+			,B.PRODUCT_BRAND           productBrand      
+			,B.PRODUCT_TITLE           productTitle      
+			,B.PRODUCT_EXPLANATION     productExplanation
+			,B.PRODUCT_PRICE           productPrice      
+			,B.PRODUCT_DATE            productDate       
+			,B.PRODUCT_IMAGE           productImage 
+            ,C.catechory_div_name      catechoryDivName
+            ,C.catechory_div_name2     catechoryDivName2 
+			,C.catechory_div_id        catechoryDivId
+			,CASE WHEN ROUND(NVL(D.AVG_POINT,0)) = 1 THEN '★☆☆☆☆'
+			      WHEN ROUND(NVL(D.AVG_POINT,0)) = 2 THEN '★★☆☆☆'
+			      WHEN ROUND(NVL(D.AVG_POINT,0)) = 3 THEN '★★★☆☆'
+			      WHEN ROUND(NVL(D.AVG_POINT,0)) = 4 THEN '★★★★☆'
+			      WHEN ROUND(NVL(D.AVG_POINT,0)) = 5 THEN '★★★★★'
+			      ELSE '☆☆☆☆☆'
+			 END                          avgPoint      
+            ,NVL(D.COMMENT_COUNT, 0)      commentCount
+            ,ROUND(NVL(D.AVG_POINT,0),2)  avgValue
+            ,NVL(E.POINT_COUNT1,0)        pointCount1
+            ,NVL(E.POINT_COUNT2,0)        pointCount2
+            ,NVL(E.POINT_COUNT3,0)        pointCount3
+            ,NVL(E.POINT_COUNT4,0)        pointCount4
+            ,NVL(E.POINT_COUNT5,0)        pointCount5
+		FROM PRODUCT B
+            ,(
+		      -- 카테고리 가져오기(상픔테이블에 소분류만 등록돼 있어서 조인해야함) (스무디한테 조인 다시 몰어보기ㅠ 	      
+				SELECT A.catechory_div_id
+                      ,a.catechory_div_name
+				      ,b.catechory_div_id2
+                      ,b.catechory_div_name2
+				  FROM CATECHORY  A
+				      ,CATECHORY2 B
+				 WHERE a.catechory_div_id = b.catechory_div_id
+		       ) C -- 카테고리
+		    ,(--상품별 평균평점
+                 SELECT PRODUCT_NUM
+                       ,AVG(COMMENT_POINT) AS AVG_POINT     --평균평점
+                       ,COUNT(*)           AS COMMENT_COUNT --평점수
+                   FROM PRODUCT_COMMENT D
+               GROUP BY PRODUCT_NUM
+                ) D
+		    ,(--평점별갯수
+                 SELECT DISTINCT
+                        PRODUCT_NUM
+                       ,(SELECT COUNT(*) FROM PRODUCT_COMMENT A WHERE D.PRODUCT_NUM = A.PRODUCT_NUM AND COMMENT_POINT = 1) AS POINT_COUNT1 --1점
+                       ,(SELECT COUNT(*) FROM PRODUCT_COMMENT A WHERE D.PRODUCT_NUM = A.PRODUCT_NUM AND COMMENT_POINT = 2) AS POINT_COUNT2 --2점
+                       ,(SELECT COUNT(*) FROM PRODUCT_COMMENT A WHERE D.PRODUCT_NUM = A.PRODUCT_NUM AND COMMENT_POINT = 3) AS POINT_COUNT3 --3점
+                       ,(SELECT COUNT(*) FROM PRODUCT_COMMENT A WHERE D.PRODUCT_NUM = A.PRODUCT_NUM AND COMMENT_POINT = 4) AS POINT_COUNT4 --4점
+                       ,(SELECT COUNT(*) FROM PRODUCT_COMMENT A WHERE D.PRODUCT_NUM = A.PRODUCT_NUM AND COMMENT_POINT = 5) AS POINT_COUNT5 --5점
+                   FROM PRODUCT_COMMENT D
+              ) E
+	   WHERE B.PRODUCT_NUM       = #{productNum}
+	     AND B.CATECHORY_DIV_ID2 = C.CATECHORY_DIV_ID2
+         AND B.PRODUCT_NUM       = D.PRODUCT_NUM (+)
+         AND B.PRODUCT_NUM       = E.PRODUCT_NUM (+)
+	</select>
+	<select id="getReply" parameterType="map" resultType="productReplyBean">
+		SELECT 
+			 COMMENT_NUM        commentNum  
+			,PRODUCT_NUM        productNum  
+			,USERID             userid      
+			,COMMENT_WRITE      commentWrite
+			,COMMENT_BLAME      commentBlame
+			,COMMENT_POINT      commentPoint
+			,COMMENT_DATE       commentDate 
+			,CASE WHEN COMMENT_POINT = 1 THEN '★☆☆☆☆'
+			      WHEN COMMENT_POINT = 2 THEN '★★☆☆☆'
+			      WHEN COMMENT_POINT = 3 THEN '★★★☆☆'
+			      WHEN COMMENT_POINT = 4 THEN '★★★★☆'
+			      WHEN COMMENT_POINT = 5 THEN '★★★★★'
+			      ELSE '☆☆☆☆☆'
+			 END                commentStars
+		FROM PRODUCT_COMMENT
+       WHERE PRODUCT_NUM = #{productNum} ORDER BY COMMENT_NUM DESC
+	</select>
+	
+	
+	<select id="getReplyByUserid" parameterType="map" resultType="productReplyBean">
+		SELECT 
+			 COMMENT_NUM        commentNum  
+			,PRODUCT_NUM        productNum  
+			,USERID             userid      
+			,COMMENT_WRITE      commentWrite
+			,COMMENT_BLAME      commentBlame
+			,COMMENT_POINT      commentPoint
+			,COMMENT_DATE       commentDate 
+		FROM PRODUCT_COMMENT
+       WHERE PRODUCT_NUM = #{productNum}  
+         AND USERID = #{userid}  
+	</select>
+	
+	<insert id="insertProduct" parameterType="productBean">
+		INSERT INTO PRODUCT
+		VALUES(
+			PRODUCT_SEQ.NEXTVAL     --productNum
+			, #{catechoryDivId2}
+			, #{productBrand}
+			, #{productTitle}
+			, #{productExplanation}
+			, #{productPrice}
+			, SYSDATE               --productDate
+			, #{productImage}
+		)
+	</insert>
+	
+	
+	<insert id="updateProduct" parameterType="productBean">
+		update PRODUCT 
+		   set 
+			   CATECHORY_DIV_ID2 = #{catechoryDivId2}
+			 , PRODUCT_BRAND     = #{productBrand}
+			 , PRODUCT_TITLE     = #{productTitle}
+			 , PRODUCT_EXPLANATION = #{productExplanation}
+			 , PRODUCT_PRICE       = #{productPrice}
+			 , PRODUCT_DATE        = SYSDATE               --productDate
+             , PRODUCT_IMAGE       = #{productImage}
+        where PRODUCT_NUM = #{productNum}
+	</insert>
+	
+	
+	<select id="getSeq" resultType="_int">
+		SELECT PRODUCT_SEQ.CURRVAL FROM DUAL
+	</select>
+	
+	<select id="getMaxProductNum" resultType="_int">
+		SELECT MAX(PRODUCT_NUM) FROM PRODUCT
+	</select>
+	
+	<insert id="insertReply" parameterType="productReplyBean">
+		INSERT INTO PRODUCT_COMMENT
+		VALUES(
+		  PRODUCT_COMMENT_SEQ.NEXTVAL
+		, #{productNum}
+		, #{userid}
+		, #{commentWrite}
+		, NULL --commentWrite
+		, #{commentPoint}
+		, SYSDATE --commentWrite
+		)
+	</insert>
+	
+	<update id="updateReply" parameterType="map">
+		UPDATE PRODUCT_COMMENT
+		SET COMMENT_WRITE = #{commentWrite}
+		WHERE COMMENT_NUM = ${commentNum}
+	</update>
+
+
+
+	<!-- 게시글 댓글 1개 삭제 -->
+	<delete id="deleteOneReply" parameterType="_int">
+		DELETE FROM PRODUCT_COMMENT WHERE COMMENT_NUM = ${commentNum}
+	</delete>
+	
+	
+	
+	<!-- 게시글 댓글 전체 삭제 -->
+	<delete id="deleteReply" parameterType="_int">
+		DELETE FROM PRODUCT_COMMENT WHERE PRODUCT_NUM = ${productNum}
+	</delete>
+	
+	
+	
+		<!-- 게시글  삭제 -->
+	<delete id="deleteProduct" parameterType="_int">
+		DELETE FROM PRODUCT WHERE PRODUCT_NUM = ${productNum}
+	</delete>
+	
+	
+	
+
+</mapper>

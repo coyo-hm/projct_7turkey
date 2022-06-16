@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<!--
+   Faction by Pixelarity
+   pixelarity.com | hello@pixelarity.com
+   License: pixelarity.com/license
+-->
+<html>
+<head>
+      <title>Untitled</title>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+      <link rel="stylesheet" href="/project_7urkey/blue/assets/css/main.css" />
+      <style>
+      		
+      </style>
+</head>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script>
+	$(document).ready(function(){ $("#header").load("../include/header.html") });
+</script>   
+<body class="is-preload">
+
+	<header id="header"></header> 
+	
+		<div class="wrapper">	
+		<section class="main">
+		<section>
+		<h9>제품 등록</h9>
+		<div class="category_area">
+			
+			<span>카테고리</span>
+			<div class="category_box">
+				<select name="category" id="category">
+					<option value="">- 전체 -</option>
+					<option value="1">스킨케어</option>
+					<option value="2">클렌징</option>
+					<option value="3">마스크팩</option>
+					<option value="4">선케어</option>
+					<option value="5">베이스메이크업</option>
+					<option value="6">아이메이크업</option>
+					<option value="7">립메이크업</option>
+					<option value="8">바디</option>
+					<option value="9">헤어</option>
+					<option value="10">향수</option>
+					<option value="11">기타</option>
+				</select>				
+			</div>
+			<div class="category_box">
+				<select name="category" id="category">
+					<option value="">- 전체 -</option>
+					<option value="1">로션</option>
+					<option value="2">페이스오일</option>
+					<option value="3">아이케어</option>
+					<option value="4">젤</option>
+					<option value="5">스킨</option>
+					<option value="6">에센스</option>
+					<option value="7">크림</option>
+					<option value="8">미스트</option>
+				</select>
+			</div>
+
+			<div class="prj_title">
+			<span>제품명</span>
+				<input type="text" name="title" id="title" value="" placeholder="Title" style="width:50%;">
+			</div>
+			
+			<div class="prj_img">
+			<span>이미지</span>
+				<input type="file" name="img" id="img" value="img" placeholder="첨부파일" style="width:30%;">
+			</div>
+			
+			<div class="prj_content">
+				<span>내용</span>
+				<div class="col-12"  width="80%" cellpadding="0" cellspacing="0">
+					<textarea name="message" id="message" placeholder="Enter your message" rows="15"></textarea>
+				</div>
+			</div>
+		</div>
+			<div class="prj_btn">
+				<input type="submit" value="등록" class="primary" style="width:15%;">
+			</div>
+	</section>
+	</section>
+
+      <!-- Scripts -->
+         <script src="../assets/js/jquery.min.js"></script>
+         <script src="../assets/js/jquery.dropotron.min.js"></script>
+         <script src="../assets/js/browser.min.js"></script>
+         <script src="../assets/js/breakpoints.min.js"></script>
+         <script src="../assets/js/util.js"></script>
+         <script src="../assets/js/main.js"></script>
+
+	</body>
+</html>
